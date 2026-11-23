@@ -1,0 +1,44 @@
+import { useCallback, useState } from 'react';
+import { ArrowUpRight, ArrowDown, Plus, Minus, Leaf, ShieldCheck, Utensils } from 'lucide-react';
+import { useMotion } from './hooks/useMotion';
+import { Cursor } from './components/Cursor';
+import { BrandIntro } from './components/BrandIntro';
+import { MomentsRail } from './components/MomentsRail';
+import { Contact } from './components/Contact';
+import StaggeredMenu from './components/StaggeredMenu';
+import { Journey, AudienceGallery, ValueMarquee, Manifesto } from './components/Experience';
+const services = [
+  { title: 'Toplu yemek', tag: 'HER GÜN, AYNI ÖZEN', text: 'Öğrenci yurtları, kamu kurumları ve özel kuruluşlar için dengeli menüler. Üretimden dağıtıma, her adımda güven.', detail: 'Kurumunuzun ihtiyaçlarına göre planlanan günlük yemek üretimi ve dağıtımı. Sağlıklı, dengeli ve hijyenik öğünlerle günlük beslenmeye destek oluyoruz.' },
+  { title: 'İhale çözümleri', tag: 'GÜÇLÜ BİR İŞ ORTAĞI', text: 'Kamu ve özel sektör için planlı, düzenli ve sürdürülebilir toplu beslenme organizasyonları.', detail: 'İhale kapsamındaki yemek hizmetlerini kurumun gereksinimleri ve ilgili mevzuat doğrultusunda yönetiyoruz. Tedarik, üretim ve servis süreçlerini bir bütün olarak ele alıyoruz.' },
+  { title: 'Kantin işletmeciliği', tag: 'GÜNÜN KÜÇÜK MOLASI', text: 'Hastane kampüslerinde sağlık çalışanlarına, hasta yakınlarına ve ziyaretçilere özenli hizmet.', detail: 'Hastane yaşamının temposuna uyum sağlayan kantin işletmeciliği. Günlük ihtiyaçları kaliteli ürünler, hijyen ve güler yüzlü hizmetle karşılıyoruz.' },
+  { title: 'Catering & etkinlik', tag: 'BİR ARAYA GELMENİN TADI', text: 'Kurumsal toplantılar ve özel organizasyonlar için, anın ruhuna yakışan ikramlar.', detail: 'Etkinliğinize uygun ikram ve catering çözümleri hazırlıyoruz. Planlamadan sunuma kadar tüm detayları organizasyonunuzun ihtiyaçlarına göre düşünüyoruz.' },
+];
+function Brand({ light = false }: { light?: boolean }) {
+  return <a href="#" className={`brand ${light ? 'brand-light' : ''}`} aria-label="İstanbul Spesial ana sayfa"><img src="/images/brand-mark.png" alt="" width="42" height="42"/><span>İSTANBUL SPESİAL<small>GIDA & CATERING</small></span></a>;
+}
+export default function App() {
+  const [intro,setIntro]=useState(true);
+  const finishIntro=useCallback(()=>setIntro(false),[]);
+  useMotion(finishIntro);
+  const [menu, setMenu] = useState(false);
+  const onMenuOpen=useCallback(()=>{setMenu(true);window.dispatchEvent(new CustomEvent('spesial:menu-state',{detail:true}));},[]);
+  const onMenuClose=useCallback(()=>{setMenu(false);window.dispatchEvent(new CustomEvent('spesial:menu-state',{detail:false}));},[]);
+  const [active, setActive] = useState<number | null>(0);
+  return <>
+    <Cursor/>{intro && <BrandIntro/>}<div className="site-shell" inert={intro}><div className="scroll-progress" aria-hidden="true"/>
+    <a className="skip-link" href="#main">İçeriğe geç</a>
+    <header className="header"><div inert={menu}><Brand/></div><div className="header-actions"><StaggeredMenu items={[{label:'Ana sayfa',link:'#'},{label:'Biz kimiz',link:'#hakkimizda'},{label:'Hizmetler',link:'#hizmetler'},{label:'Yaklaşımımız',link:'#yaklasim'},{label:'İletişim',link:'#iletisim'}]} colors={['#a58b43','#292824']} menuButtonColor="#252521" openMenuButtonColor="#252521" accentColor="#a58b43" displaySocials={false} onMenuOpen={onMenuOpen} onMenuClose={onMenuClose}/></div></header>
+    <main id="main" inert={menu}>
+
+      <section className="hero" aria-labelledby="hero-title">
+        <div className="hero-copy"><p className="eyebrow hero-enter"><span className="status-dot"/> İYİ YEMEK. İYİ HİSSETTİRİR.</p><h1 id="hero-title" className="hero-enter">Her öğünde<br/>aynı <span className="serif">özen</span><span className="gold-period">●</span></h1><p className="hero-description hero-enter">Bir tabak yemekten daha fazlası.<br/>Birlikte geçirilen her güne kattığımız değer.</p><a href="#hizmetler" className="button button-dark hero-enter" data-magnetic>Lezzeti keşfedin <span><ArrowUpRight size={20}/></span></a><div className="hero-bottom hero-enter"><a href="#hakkimizda" className="scroll-hint"><span><ArrowDown size={16}/></span> HİKÂYEMİZE KAYDIRIN</a><span className="hero-index">01 — 06</span></div></div>
+        <div className="hero-visual" data-cursor><img className="hero-photo" src="/images/hero-food.webp" alt="Izgara tavuk, bulgur pilavı ve taze sebzelerle özenle hazırlanmış öğün" fetchPriority="high"/><div className="image-shade"/><div className="visual-top"><span>İSTANBUL SPESİAL</span><span>ÖZENLE HAZIRLANDI ↗</span></div><div className="round-seal"><Leaf size={24}/><span>DOĞASINDA<br/>ÖZEN VAR.</span></div><div className="visual-caption"><span>İyi malzeme.<br/><em>İyi bir başlangıç.</em></span><span className="caption-number">TAZE · DENGELİ</span></div></div>
+      </section>
+      <div className="values-strip"><span>KURUMLAR İÇİN DÜŞÜNÜLDÜ.</span><span><Utensils size={17}/> Dengeli menüler</span><span><ShieldCheck size={17}/> Güvenilir üretim</span><span><Leaf size={17}/> Sürdürülebilir yaklaşım</span><span className="strip-star">✳</span></div>
+      <section className="intro section-pad" id="hakkimizda"><div className="section-label" data-reveal><span>01 / BİZ KİMİZ</span><span>SOFRADA BULUŞURUZ.</span></div><div className="intro-grid"><h2 data-reveal>Kalabalık sofralara,<br/><span className="muted">kişisel bir</span> <span className="serif">dokunuş.</span></h2><div className="intro-text" data-reveal><p>Biz İstanbul Spesial. Her gün pek çok insanın sofrasına aynı sorumlulukla konuk oluyoruz.</p><p>Öğrenci yurtlarından kamu kurumlarına, hastanelerden özel kuruluşlara; iyi yemeği, güvenilir hizmetle buluşturuyoruz.</p><a href="#yaklasim" className="text-link">Bizi biz yapan yaklaşım <ArrowUpRight size={18}/></a></div></div><div className="wordmark" aria-hidden="true" data-reveal>özen, her detayda.<span>✳</span></div></section>
+      <ValueMarquee/><MomentsRail/><section className="services section-pad" id="hizmetler"><div className="section-label" data-reveal><span>02 / NELER YAPIYORUZ</span><span>İHTİYACINIZA GÖRE, ÖZENLE.</span></div><div className="services-heading"><div className="service-count" aria-label="4 hizmet alanı"><span data-count="4" aria-hidden="true">04</span><span>HİZMET ALANI.<br/>AYNI ÖZEN.</span></div><h2 data-reveal>Farklı ihtiyaçlar.<br/><span className="serif">Tek bir standart.</span></h2><p data-reveal>İşin ölçeği değişir.<br/>Özenimiz değişmez.</p></div><div className="services-grid"><div className="service-image" data-reveal data-cursor><img src="/images/service-food.webp" alt="Özenli bir sunumla hazırlanan taze Akdeniz lezzetleri" loading="lazy"/><span className="image-label">SOFRANIZA DEĞER KATIYORUZ.</span><span className="image-plus">✳</span></div><div className="service-list">{services.map((s, i) => <article className={`service ${active === i ? 'selected' : ''}`} key={s.title} data-reveal><button aria-expanded={active === i} aria-controls={`service-${i}`} onClick={() => setActive(active === i ? null : i)}><span className="service-index">0{i + 1}</span><span className="service-title">{s.title}</span><span className="service-toggle">{active === i ? <Minus size={18}/> : <Plus size={18}/>}</span></button><div className="service-content" id={`service-${i}`} inert={active !== i}><div><span className="eyebrow">{s.tag}</span><p>{s.text}</p><p className="service-detail">{s.detail}</p><a href="#iletisim" className="text-link">Birlikte planlayalım <ArrowUpRight size={16}/></a></div></div></article>)}</div></div></section>
+      <section className="philosophy" id="yaklasim"><div className="philosophy-photo"><img src="/images/hero-food.webp" alt="Taze malzemelerle hazırlanan dengeli bir yemek" loading="lazy"/></div><div className="philosophy-content"><div className="section-label" data-reveal><span>03 / YAKLAŞIMIMIZ</span><Leaf size={20}/></div><h2 data-reveal>İyi yemek,<br/>iyi bir niyetle<br/><span className="serif">başlar.</span></h2><p data-reveal>Doğru malzemeyi seçmekten son tabağın sunumuna kadar, her aşamada aynı titizliği gösteriyoruz.</p><div className="principles">{[['01', 'Güvenle hazırlanır.', 'Hijyen ve gıda güvenliği, her adımın temelinde.'], ['02', 'Dengeyle düşünülür.', 'Günlük ihtiyaçlara uygun, sağlıklı menüler.'], ['03', 'Özenle ulaştırılır.', 'Güçlü tedarik, planlı üretim, düzenli hizmet.']].map(([n, title, text]) => <div key={n} data-reveal><span>{n}</span><div><h3>{title}</h3><p>{text}</p></div><ArrowUpRight size={17}/></div>)}</div></div></section>
+      <Journey/><AudienceGallery/><Manifesto/><Contact/>
+    </main><footer inert={menu}><Brand light/><p>Her öğünde, aynı özen.</p><a href="#">Başa dön <ArrowUpRight size={16}/></a><div className="footer-bottom"><span>© {new Date().getFullYear()} İstanbul Spesial Gıda Ltd. Şti.</span><span>ÖZENLE HAZIRLANDI. ANTALYA, TÜRKİYE.</span></div></footer>
+  </div></>;
+}
