@@ -32,3 +32,15 @@
 /public/images/hero-food.png
 /public/images/service-food.png
 /public/images/ingredients.png
+
+# Admin API sources; database and environment secrets stay local.
+!/server/
+!/.env.example
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+
+# Production deployment scripts and CloudPanel instructions.
+!/scripts/
+!/deploy/

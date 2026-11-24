@@ -16,3 +16,10 @@ public/images/ingredients.png
 **/*.key
 **/*.pem
 **/node_modules
+
+!server
+!server/**
+**/*.sqlite*
+**/*.db*
+
+server/*.test.mjs
